@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol BLESerivce {
+protocol BLEService {
     func startAdvertising(address: String) -> Bool
     func stopAdvertising()
     func startScanning() -> Bool

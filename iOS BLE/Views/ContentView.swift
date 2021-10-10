@@ -2,30 +2,24 @@
 //  ContentView.swift
 //  iOS BLE
 //
-//  Created by Charmaine Lim on 7/10/21.
+//  Created by Charmaine Lim on 11/10/21.
 //
 
 import SwiftUI
 
 struct ContentView: View {
-    public var central = BLECentral()
-    
     var body: some View {
-        VStack (alignment: .leading, spacing: 10) {
-            Text("Take My Money!")
-            Text("No. of discovered peripherals: \(central.discoveredPeripherals.count)")
-            
-            if central.discoveredPeripherals.count > 0 {
-                List(central.discoveredPeripherals, id: \.peripheral) { peripheral in
-                    PeripheralView(peripheral: peripheral)
+        NavigationView {
+            VStack(alignment: .center, spacing: 30) {
+                NavigationLink(destination: DiscoveredPeripheralsView()) {
+                    Text("Pay Money")
                 }
-            } else {
-                Text("No peripherals found")
+
+                NavigationLink(destination: BLEPeripheralView() ) {
+                    Text("Receive Money")
+                }
             }
-            
         }
-        
-            
     }
 }
 

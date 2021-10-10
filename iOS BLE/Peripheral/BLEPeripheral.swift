@@ -15,7 +15,7 @@ import CoreBluetooth
     // Properties: Define how a characteristic's value can be used (read, write, notify, write w/o response...)
     // Descriptors: Contain related info about the characteristic value (e.g. user description, enabling notifs, presentation format...)
 
-class BLEPeripheral: NSObject, CBPeripheralManagerDelegate { // TOOD: vs CBPeripheralDelegate ???
+class BLEPeripheral: NSObject, CBPeripheralManagerDelegate, ObservableObject { // TOOD: vs CBPeripheralDelegate ???
     private var manager: CBPeripheralManager!
     private var characteristic: CBMutableCharacteristic! // provide write access to the properties in this parent class
     
@@ -38,6 +38,7 @@ class BLEPeripheral: NSObject, CBPeripheralManagerDelegate { // TOOD: vs CBPerip
         service.characteristics = [characteristic]
         
         manager.add(service)// here, service is cached, and we cannot make anymore changes
+        print("service setup complete")
     }
     
     // MARK: CBPeripheralManagerDelegate
@@ -46,6 +47,7 @@ class BLEPeripheral: NSObject, CBPeripheralManagerDelegate { // TOOD: vs CBPerip
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
             print("peripheral is powered on")
+            setup()
         } else {
             print("peripheral not avail: \(peripheral.state.rawValue)")
         }
@@ -59,7 +61,7 @@ class BLEPeripheral: NSObject, CBPeripheralManagerDelegate { // TOOD: vs CBPerip
             print("Peripheral added service. Begin advertising")
             let advertisementData: [String: Any] = [
                 CBAdvertisementDataServiceUUIDsKey: [CBUUID(string: BLEIdentifiers.serviceIdentifier)],
-                CBAdvertisementDataLocalNameKey: "BLE Sensor"
+                CBAdvertisementDataLocalNameKey: "BLE Sensor" // this key will not be transmitted when app is backgrounded
             ]
             manager.startAdvertising(advertisementData)
         }

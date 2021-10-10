@@ -7,13 +7,16 @@
 
 import SwiftUI
 
-struct PeripheralView: View {
+struct DiscoveredPeripheralView: View {
     public var peripheral: DiscoveredPeripheral
     
     var body: some View {
         HStack {
-            Text(peripheral.peripheral.name ?? "no name")
+            Text(peripheral.peripheral.name ?? "nameless")
+            Text("\(peripheral.peripheral.identifier.uuidString)")
             Text("\(peripheral.rssi)")
+            Text("\(peripheral.advertisementData.debugDescription)")
+            
         }
     }
 }

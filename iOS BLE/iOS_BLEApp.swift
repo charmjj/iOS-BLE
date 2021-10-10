@@ -12,7 +12,7 @@ struct iOS_BLEApp: App {
     // var flowController: AppFlowController?
     
     var body: some Scene {
-        WindowGroup {
+        WindowGroup("TAKE MY MONEY") {
             ContentView()
         }
     }
