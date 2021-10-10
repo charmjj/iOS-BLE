@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8324B26D2712E558009F341E /* PeripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8324B26C2712E558009F341E /* PeripheralView.swift */; };
 		837F4A9E270EE15400246D2C /* iOS_BLEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837F4A9D270EE15400246D2C /* iOS_BLEApp.swift */; };
 		837F4AA0270EE15400246D2C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837F4A9F270EE15400246D2C /* ContentView.swift */; };
 		837F4AA2270EE15800246D2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 837F4AA1270EE15800246D2C /* Assets.xcassets */; };
@@ -15,6 +16,10 @@
 		837F4ABB270EE15800246D2C /* iOS_BLEUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837F4ABA270EE15800246D2C /* iOS_BLEUITests.swift */; };
 		837F4AC9270F505A00246D2C /* AppFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837F4AC8270F505A00246D2C /* AppFlowController.swift */; };
 		837F4ACB270F6B1000246D2C /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837F4ACA270F6B1000246D2C /* BLECentral.swift */; };
+		83D3D542270FF31A0092BC66 /* DiscoveredPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3D541270FF31A0092BC66 /* DiscoveredPeripheral.swift */; };
+		83D3D544270FFB5B0092BC66 /* BLEPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3D543270FFB5B0092BC66 /* BLEPeripheral.swift */; };
+		83D3D5462710018B0092BC66 /* BLEIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3D5452710018B0092BC66 /* BLEIdentifiers.swift */; };
+		83D3D5482710C0740092BC66 /* BLEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3D5472710C0740092BC66 /* BLEService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8324B26C2712E558009F341E /* PeripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralView.swift; sourceTree = "<group>"; };
 		837F4A9A270EE15400246D2C /* iOS BLE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS BLE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837F4A9D270EE15400246D2C /* iOS_BLEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_BLEApp.swift; sourceTree = "<group>"; };
 		837F4A9F270EE15400246D2C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -49,6 +55,10 @@
 		837F4ABC270EE15800246D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		837F4AC8270F505A00246D2C /* AppFlowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowController.swift; sourceTree = "<group>"; };
 		837F4ACA270F6B1000246D2C /* BLECentral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECentral.swift; sourceTree = "<group>"; };
+		83D3D541270FF31A0092BC66 /* DiscoveredPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveredPeripheral.swift; sourceTree = "<group>"; };
+		83D3D543270FFB5B0092BC66 /* BLEPeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPeripheral.swift; sourceTree = "<group>"; };
+		83D3D5452710018B0092BC66 /* BLEIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEIdentifiers.swift; sourceTree = "<group>"; };
+		83D3D5472710C0740092BC66 /* BLEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +86,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8324B26B2712E546009F341E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				837F4A9F270EE15400246D2C /* ContentView.swift */,
+				837F4A9D270EE15400246D2C /* iOS_BLEApp.swift */,
+				8324B26C2712E558009F341E /* PeripheralView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		837F4A91270EE15400246D2C = {
 			isa = PBXGroup;
 			children = (
@@ -99,13 +119,16 @@
 		837F4A9C270EE15400246D2C /* iOS BLE */ = {
 			isa = PBXGroup;
 			children = (
+				8324B26B2712E546009F341E /* Views */,
+				83D3D5452710018B0092BC66 /* BLEIdentifiers.swift */,
+				83D3D543270FFB5B0092BC66 /* BLEPeripheral.swift */,
+				83D3D541270FF31A0092BC66 /* DiscoveredPeripheral.swift */,
+				837F4ACA270F6B1000246D2C /* BLECentral.swift */,
 				837F4AC8270F505A00246D2C /* AppFlowController.swift */,
-				837F4A9D270EE15400246D2C /* iOS_BLEApp.swift */,
-				837F4A9F270EE15400246D2C /* ContentView.swift */,
 				837F4AA1270EE15800246D2C /* Assets.xcassets */,
 				837F4AA6270EE15800246D2C /* Info.plist */,
 				837F4AA3270EE15800246D2C /* Preview Content */,
-				837F4ACA270F6B1000246D2C /* BLECentral.swift */,
+				83D3D5472710C0740092BC66 /* BLEService.swift */,
 			);
 			path = "iOS BLE";
 			sourceTree = "<group>";
@@ -265,10 +288,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D3D5462710018B0092BC66 /* BLEIdentifiers.swift in Sources */,
+				83D3D542270FF31A0092BC66 /* DiscoveredPeripheral.swift in Sources */,
+				83D3D544270FFB5B0092BC66 /* BLEPeripheral.swift in Sources */,
 				837F4AC9270F505A00246D2C /* AppFlowController.swift in Sources */,
 				837F4AA0270EE15400246D2C /* ContentView.swift in Sources */,
 				837F4A9E270EE15400246D2C /* iOS_BLEApp.swift in Sources */,
 				837F4ACB270F6B1000246D2C /* BLECentral.swift in Sources */,
+				83D3D5482710C0740092BC66 /* BLEService.swift in Sources */,
+				8324B26D2712E558009F341E /* PeripheralView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

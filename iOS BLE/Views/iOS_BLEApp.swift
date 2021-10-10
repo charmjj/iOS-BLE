@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct iOS_BLEApp: App {
+    // var flowController: AppFlowController?
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
