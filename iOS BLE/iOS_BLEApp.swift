@@ -9,11 +9,12 @@ import SwiftUI
 
 @main
 struct iOS_BLEApp: App {
-    // var flowController: AppFlowController?
+    
+    @StateObject var bleManager = BLEManager()
     
     var body: some Scene {
         WindowGroup("TAKE MY MONEY") {
-            ContentView()
+            ContentView().environmentObject(bleManager)
         }
     }
 }

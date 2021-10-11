@@ -14,6 +14,7 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
     @Published private(set) var discoveredPeripherals = [DiscoveredPeripheral]() // each time centralManager discovers a peripheral, it'll be added here
     private var connectedPeripheral: CBPeripheral?
     var onDiscovered: (()->Void)?
+    var onDeviceFound: ((String) -> Void)?
         
     override init() {
         super.init()
@@ -24,24 +25,25 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
     // 2.
     func scanForPeripherals() {
         let options: [String: Any] = [CBCentralManagerScanOptionAllowDuplicatesKey:false]
-        manager.scanForPeripherals(withServices: [CBUUID(string: BLEIdentifiers.serviceIdentifier)], options: options) // TODO: APP ID put inside withServices
-        print("scanForPeripherals function entered")
+        manager.scanForPeripherals(withServices: [CBUUID(string: BLEIdentifiers.serviceIdentifier)], options: options)
     }
     
+    // 4.
     func connect(at index: Int) {
         guard index >= 0, index < discoveredPeripherals.count else { return }
-
         manager.stopScan()
         manager.connect(discoveredPeripherals[index].peripheral, options: nil) // async
+    }
+    
+    func stopScan() {
+        manager.stopScan()
     }
     
     // MARK: - CBCentralManagerDelegate
     
     // 1.
-    // REQUIRED function: Tells the delegate the central manager’s state updated. You should issue commands to the central manager only when the central manager’s state indicates it’s powered on!!!
     func centralManagerDidUpdateState(_ central: CBCentralManager) { // is central device's bluetooth powered on?
         if central.state == .poweredOn {
-            scanForPeripherals()
             print("central is powered on")
         } else {
             print("central is unavailable: \(central.state.rawValue)")
@@ -57,16 +59,26 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
             existingPeripheral.rssi = RSSI
             print("existing peripheral's properties updated in centralManager function")
         } else {
-            if peripheral.name != nil {
-                discoveredPeripherals.append(DiscoveredPeripheral(peripheral: peripheral, rssi: RSSI, advertisementData: advertisementData))
-                print("new legit peripheral discovered in centralManager function")
-                connect(at: 0)
+            if let name = peripheral.name {
+                // TODO: CHECK IF RSSI HITS THRESHOLD ~5cm
+                if Int(RSSI) > -55 {
+                    discoveredPeripherals.append(DiscoveredPeripheral(peripheral: peripheral, rssi: RSSI, advertisementData: advertisementData))
+//                    if let onDeviceFound = onDeviceFound {
+//                        onDeviceFound(name)
+//                    }
+                    print("new legit peripheral discovered in centralManager function")
+                    print(advertisementData)
+                    connect(at: 0)
+                }
+//                print("new legit peripheral discovered in centralManager function")
+//                print(advertisementData)
+//                connect(at: 0)
             }
 
         }
-        onDiscovered?()
     }
     
+    // 5a.
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("central did connect")
         connectedPeripheral = peripheral
@@ -75,11 +87,14 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
         
     }
     
+    // 5b.
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("central did fail to connect")
     }
     
     // MARK: - CBPeripheralDelegate
+    
+    // 6.
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if let error = error {
             print("peripheral failed to discover services: \(error.localizedDescription)")
@@ -91,6 +106,7 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
         }
     }
     
+    // 7.
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if let error = error {
             print("Peripheral failed to discover characteristics: \(error.localizedDescription)")
@@ -109,7 +125,19 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
     func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
         if let error = error {
             print("peripheral failed to discover descriptor: \(error.localizedDescription)")
+        } else if characteristic.uuid.uuidString == BLEIdentifiers.characteristicIdentifier {
+            if let descriptor = characteristic.descriptors?.first {
+                if let onDeviceFound = onDeviceFound {
+                    onDeviceFound(descriptor.description)
+                }
+            }
+            characteristic.descriptors?.forEach({ descriptor in
+                print("descriptor discovered: \(descriptor)")
+                peripheral.readValue(for: descriptor)
+            })
+              
         } else {
+            
             characteristic.descriptors?.forEach({ descriptor in
                 print("descriptor discovered: \(descriptor)")
                 peripheral.readValue(for: descriptor)
@@ -124,12 +152,19 @@ class BLECentral: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
             print("characteristic value updated: \(characteristic)")
         }
     }
-    
+
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
         if let error = error {
             print("peripheral error updating value for descriptor: \(error.localizedDescription)")
-        } else {
-            print("descriptor value updated: \(descriptor)")
+//        } else {
+//            print("descriptor value updated: \(descriptor)")
+//        }
+        }
+        else {
+                if let onDeviceFound = onDeviceFound {
+                    onDeviceFound(descriptor.value as! String)
+                }
+              
         }
     }
     

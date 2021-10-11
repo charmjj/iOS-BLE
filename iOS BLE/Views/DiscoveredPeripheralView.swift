@@ -15,7 +15,7 @@ struct DiscoveredPeripheralView: View {
             Text(peripheral.peripheral.name ?? "nameless")
             Text("\(peripheral.peripheral.identifier.uuidString)")
             Text("\(peripheral.rssi)")
-            Text("\(peripheral.advertisementData.debugDescription)")
+            Text("\(String(describing: peripheral.advertisementData))")
             
         }
     }

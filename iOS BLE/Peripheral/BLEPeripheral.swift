@@ -18,6 +18,7 @@ import CoreBluetooth
 class BLEPeripheral: NSObject, CBPeripheralManagerDelegate, ObservableObject { // TOOD: vs CBPeripheralDelegate ???
     private var manager: CBPeripheralManager!
     private var characteristic: CBMutableCharacteristic! // provide write access to the properties in this parent class
+    private var service: CBMutableService?
     
     override init() {
         super.init()
@@ -25,20 +26,25 @@ class BLEPeripheral: NSObject, CBPeripheralManagerDelegate, ObservableObject { /
     }
     
     // 2.
-    func setup() { // characteristic aka state
+    func addService(address: String) -> Bool { // characteristic aka state
         let characteristicUUID = CBUUID(string: BLEIdentifiers.characteristicIdentifier)
         characteristic = CBMutableCharacteristic(type: characteristicUUID, properties: [.read], value: nil, permissions: [.readable])
         // descriptor: provide additional info about the characteristic, or allow its behavior to be controlled
-        let descriptor = CBMutableDescriptor(type: CBUUID(string: CBUUIDCharacteristicUserDescriptionString), value: "BLESensor prototype")
+        let descriptor = CBMutableDescriptor(type: CBUUID(string: CBUUIDCharacteristicUserDescriptionString), value: address)
         characteristic.descriptors = [descriptor]
         
         let serviceUUID = CBUUID(string: BLEIdentifiers.serviceIdentifier)
         let service = CBMutableService(type: serviceUUID, primary: true)
-        
         service.characteristics = [characteristic]
-        
+        self.service = service
         manager.add(service)// here, service is cached, and we cannot make anymore changes
-        print("service setup complete")
+        print("advertising address: \(address)")
+        return true
+    }
+    
+    func removeService() {
+        manager.removeAllServices()
+        print("service removed")
     }
     
     // MARK: CBPeripheralManagerDelegate
@@ -47,7 +53,6 @@ class BLEPeripheral: NSObject, CBPeripheralManagerDelegate, ObservableObject { /
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
             print("peripheral is powered on")
-            setup()
         } else {
             print("peripheral not avail: \(peripheral.state.rawValue)")
         }

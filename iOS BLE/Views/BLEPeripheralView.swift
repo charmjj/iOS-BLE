@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct BLEPeripheralView: View {
-    @StateObject public var peripheral = BLEPeripheral()
+    @EnvironmentObject var bleManager: BLEManager
     var body: some View {
-        Text("Advertising...")
+        Text("Advertising...").onAppear(perform: {
+            bleManager.startAdvertising(address: "TAKEMYMONEY")
+        })
     }
 }
 
